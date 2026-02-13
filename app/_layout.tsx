@@ -59,6 +59,8 @@ export default function RootLayout() {
           <Stack.Screen name="gallery" />
           <Stack.Screen name="careers" />
           <Stack.Screen name="contact" />
+          <Stack.Screen name="pinckney-assisted-living" />
+          <Stack.Screen name="hamburg-assisted-living" />
         </Stack>
       </GestureHandlerRootView>
     </QueryClientProvider>

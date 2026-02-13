@@ -13,15 +13,17 @@ import { MapPin, ArrowRight, Bed } from "lucide-react-native";
 const HOMES = [
   {
     id: "pinckney",
+    path: "/pinckney-assisted-living",
     name: "Maple Manor of Pinckney",
-    address: "7119 Pinckney Rd, Pinckney, MI",
+    address: "7119 Pinckney Road, Pinckney, MI 48169",
     image: "https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/6imye9xyizbhddmw1khot", 
     description: "Nestled in a quiet, rural setting, our Pinckney home offers a peaceful retreat with spacious outdoor areas and a cozy, family-centered interior.",
   },
   {
     id: "hamburg",
+    path: "/hamburg-assisted-living",
     name: "Maple Manor of Hamburg",
-    address: "9090 Chilson Rd, Brighton, MI",
+    address: "9090 Chilson Road, Brighton, MI 48116",
     image: "https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/uho85o3ghgcsliuw5l2qv",
     description: "Maple Manor of Hamburg is a quiet, boutique senior living home with peaceful views overlooking a nearby golf course. The setting is calm, bright, and home like, designed for comfort, dignity, and daily connection.",
   },
@@ -153,8 +155,7 @@ export default function HomesIndexScreen() {
                 <View style={styles.actions}>
                   <Button
                     title="View Details"
-                    // @ts-ignore
-                    onPress={() => router.push(`/homes/${home.id}`)}
+                    onPress={() => router.push(home.path as any)}
                     size="medium"
                   />
                   <Button

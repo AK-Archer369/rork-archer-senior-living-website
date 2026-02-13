@@ -11,15 +11,17 @@ import { MapPin, ArrowRight } from "lucide-react-native";
 const HOMES = [
   {
     id: "pinckney",
+    path: "/pinckney-assisted-living",
     name: "Maple Manor of Pinckney",
-    address: "7119 Pinckney Rd, Pinckney, MI",
+    address: "7119 Pinckney Road, Pinckney, MI 48169",
     image: "https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/6imye9xyizbhddmw1khot",
     description: "A cozy 6-bed home nestled in a quiet setting, offering compassionate care and a welcoming atmosphere.",
   },
   {
     id: "hamburg",
+    path: "/hamburg-assisted-living",
     name: "Maple Manor of Hamburg",
-    address: "9090 Chilson Rd, Brighton, MI",
+    address: "9090 Chilson Road, Brighton, MI 48116",
     image: "https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/uho85o3ghgcsliuw5l2qv",
     description: "Located in Brighton, this home provides attentive support and a vibrant community life for residents.",
   },
@@ -71,7 +73,7 @@ export function HomesSection() {
                 <View style={styles.actions}>
                   <Button
                     title="View Home"
-                    onPress={() => router.push("/homes" as any)}
+                    onPress={() => router.push(home.path as any)}
                     variant="outline"
                     size="small"
                     style={{ flex: 1 }}

@@ -68,22 +68,22 @@ export function Footer() {
             <Typography variant="h4" color={COLORS.white}>
               Locations
             </Typography>
-            <TouchableOpacity onPress={() => navigateTo("/homes")}>
+            <TouchableOpacity onPress={() => navigateTo("/pinckney-assisted-living")}>
               <Typography variant="bodySmall" color={COLORS.white} style={styles.link}>
                 Maple Manor of Pinckney
               </Typography>
             </TouchableOpacity>
             <Typography variant="caption" color={COLORS.white} style={{ opacity: 0.6, marginBottom: 8 }}>
-              7119 Pinckney Rd, Pinckney, MI
+              7119 Pinckney Road, Pinckney, MI 48169
             </Typography>
             
-            <TouchableOpacity onPress={() => navigateTo("/homes")} style={{ marginTop: 8 }}>
+            <TouchableOpacity onPress={() => navigateTo("/hamburg-assisted-living")} style={{ marginTop: 8 }}>
               <Typography variant="bodySmall" color={COLORS.white} style={styles.link}>
                 Maple Manor of Hamburg
               </Typography>
             </TouchableOpacity>
             <Typography variant="caption" color={COLORS.white} style={{ opacity: 0.6 }}>
-              9090 Chilson Rd, Brighton, MI
+              9090 Chilson Road, Brighton, MI 48116
             </Typography>
           </View>
 
