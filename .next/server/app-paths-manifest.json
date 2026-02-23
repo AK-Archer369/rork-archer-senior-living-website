@@ -1,4 +1,5 @@
 {
   "/page": "app/page.js",
-  "/pinckney-assisted-living/page": "app/pinckney-assisted-living/page.js"
+  "/pinckney-assisted-living/page": "app/pinckney-assisted-living/page.js",
+  "/about/page": "app/about/page.js"
 }
