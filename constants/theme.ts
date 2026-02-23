@@ -1,7 +1,7 @@
 export const COLORS = {
-  primary: "#6B8E6B", // Muted green accent
-  primaryDark: "#527052",
-  secondary: "#D4B483", // Warm neutral/goldish (complementary)
+  primary: "#2C5530", // Dark green
+  primaryDark: "#1A3D1E", // Darker green
+  secondary: "#D4AF37", // Gold
   background: "#F9F8F6", // Off-white warm background
   surface: "#FFFFFF",
   text: "#2D2D2D", // Charcoal

@@ -1,71 +1,169 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TextInput, useWindowDimensions, Alert, Platform, TouchableOpacity, Linking } from "react-native";
+import {
+  View,
+  StyleSheet,
+  useWindowDimensions,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import { Stack, useRouter } from "expo-router";
+import Head from "expo-router/head";
 import { ScreenLayout } from "@/components/layout/ScreenLayout";
 import { Container } from "@/components/ui/Container";
 import { Typography } from "@/components/ui/Typography";
 import { Button } from "@/components/ui/Button";
 import { COLORS, SPACING, BORDER_RADIUS } from "@/constants/theme";
-import { Phone, Mail, MapPin, Check } from "lucide-react-native";
-import { Picker } from "@react-native-picker/picker";
+import { Phone, Mail, MapPin, CheckCircle2 } from "lucide-react-native";
+
+const CARE_NEEDS_OPTIONS = [
+  "Mobility Assistance",
+  "Memory Care",
+  "Medication Management",
+  "Personal Care",
+  "Other",
+];
+
+const TIMELINE_OPTIONS = [
+  "Immediately",
+  "Within 30 days",
+  "1-3 months",
+  "Just exploring options",
+];
+
+const LOCATION_OPTIONS = [
+  "Maple Manor Pinckney",
+  "Maple Manor Hamburg",
+  "No preference",
+];
+
+const BEST_TIME_OPTIONS = [
+  "Morning (9am-12pm)",
+  "Afternoon (12pm-5pm)",
+  "Evening (5pm-8pm)",
+  "Anytime",
+];
 
 export default function ContactScreen() {
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
+  const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  // Form State
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [relationship, setRelationship] = useState("");
-  const [timeframe, setTimeframe] = useState("immediately");
-  const [needs, setNeeds] = useState("");
-  const [preferredHome, setPreferredHome] = useState("either");
+  const [formData, setFormData] = useState({
+    name: "",
+    relationship: "",
+    residentName: "",
+    residentAge: "",
+    careNeeds: [] as string[],
+    preferredLocation: "",
+    timeline: "",
+    phone: "",
+    bestTimeToCall: "",
+    email: "",
+    additionalNotes: "",
+  });
 
-  const handleSubmit = async () => {
-    if (!name || !phone) {
-      if (Platform.OS === 'web') {
-        window.alert("Please fill in at least your name and phone number.");
-      } else {
-        Alert.alert("Missing Information", "Please fill in at least your name and phone number.");
-      }
-      return;
-    }
-
-    setIsSubmitting(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSuccess(true);
-      // Reset form
-      setName("");
-      setPhone("");
-      setEmail("");
-      setRelationship("");
-      setNeeds("");
-    }, 1500);
+  const updateField = (field: string, value: any) => {
+    setFormData({ ...formData, [field]: value });
   };
 
-  if (isSuccess) {
+  const toggleCareNeed = (need: string) => {
+    const current = formData.careNeeds;
+    if (current.includes(need)) {
+      updateField("careNeeds", current.filter((n) => n !== need));
+    } else {
+      updateField("careNeeds", [...current, need]);
+    }
+  };
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/rest/v1/contact_submissions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || "",
+          "Authorization": `Bearer ${process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY}`,
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          relationship: formData.relationship,
+          resident_name: formData.residentName,
+          resident_age: formData.residentAge ? parseInt(formData.residentAge) : null,
+          care_needs: formData.careNeeds,
+          preferred_location: formData.preferredLocation,
+          timeline: formData.timeline,
+          phone: formData.phone,
+          best_time_to_call: formData.bestTimeToCall,
+          email: formData.email,
+          additional_notes: formData.additionalNotes,
+        }),
+      });
+
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const canProceed = () => {
+    switch (step) {
+      case 1:
+        return formData.name && formData.relationship;
+      case 2:
+        return formData.residentName && formData.residentAge;
+      case 3:
+        return formData.careNeeds.length > 0;
+      case 4:
+        return formData.preferredLocation && formData.timeline;
+      case 5:
+        return formData.phone && formData.bestTimeToCall;
+      default:
+        return true;
+    }
+  };
+
+  if (submitted) {
     return (
       <ScreenLayout>
-        <Container style={{ flex: 1, justifyContent: "center", paddingVertical: SPACING.xxl }}>
-          <View style={styles.successCard}>
-            <View style={styles.successIcon}>
-              <Check size={48} color={COLORS.white} />
-            </View>
-            <Typography variant="h2" align="center" color={COLORS.primaryDark}>
-              Message Sent!
+        <Head>
+          <title>Thank You | Archer Senior Living</title>
+        </Head>
+        <Stack.Screen options={{ title: "Thank You" }} />
+
+        <Container style={styles.thankYouContainer}>
+          <View style={styles.thankYouContent}>
+            <CheckCircle2 size={80} color={COLORS.primary} />
+            <Typography variant="h1" color={COLORS.primaryDark} align="center" style={{ marginTop: SPACING.xl }}>
+              Thank You for Reaching Out
             </Typography>
-            <Typography variant="body" align="center" style={{ marginBottom: SPACING.xl, opacity: 0.8, lineHeight: 26 }}>
-              Thank you for reaching out to Archer Senior Living. We understand how important this decision is, and a member of our team will contact you shortly to answer your questions or schedule your tour.
+            <Typography variant="body" align="center" style={{ marginTop: SPACING.m, lineHeight: 28, maxWidth: 600 }}>
+              We have received your information and truly appreciate you considering Archer Senior Living for your
+              loved one's care. A member of our family will contact you soon to discuss your needs and schedule a
+              personal tour of our Maple Manor homes.
+            </Typography>
+            <Typography variant="body" align="center" style={{ marginTop: SPACING.l, lineHeight: 28, maxWidth: 600 }}>
+              If you have any immediate questions or would like to speak with us right away, please call us at{" "}
+              <Typography variant="body" color={COLORS.primary} weight="bold">
+                (248) 854-4944
+              </Typography>
+            </Typography>
+            <Typography variant="h3" color={COLORS.primaryDark} align="center" style={{ marginTop: SPACING.xxl }}>
+              We look forward to meeting you and your family.
             </Typography>
             <Button
-              title="Back to Home"
-              onPress={() => setIsSuccess(false)} // Or navigate home
+              title="Return to Home"
+              onPress={() => router.push("/" as any)}
               variant="outline"
+              style={{ marginTop: SPACING.xl }}
             />
           </View>
         </Container>
@@ -75,176 +173,363 @@ export default function ContactScreen() {
 
   return (
     <ScreenLayout>
+      <Head>
+        <title>Contact Us | Schedule a Tour | Archer Senior Living | Livingston County MI</title>
+        <meta
+          name="description"
+          content="Contact Archer Senior Living to schedule a tour of our Pinckney or Hamburg adult foster care homes. Family-centered care in Livingston County Michigan."
+        />
+      </Head>
+      <Stack.Screen options={{ title: "Contact Us" }} />
+
       <View style={styles.header}>
         <Container>
           <Typography variant="h1" color={COLORS.white} align="center">
-            Contact Us
+            Schedule a Tour
           </Typography>
           <Typography variant="h3" color={COLORS.white} align="center" weight="normal" style={{ opacity: 0.9 }}>
-            Schedule a Tour or Get More Information
+            Let's find the perfect home for your loved one
           </Typography>
         </Container>
       </View>
 
-      <Container style={styles.contentContainer}>
-        <View style={[styles.grid, isMobile && styles.gridMobile]}>
-          {/* Contact Info Side */}
-          <View style={[styles.infoCol, isMobile && styles.infoColMobile]}>
-            <Typography variant="h3" color={COLORS.primaryDark} style={{ marginBottom: SPACING.l }}>
-              Get in Touch
-            </Typography>
-            <Typography variant="body" style={{ marginBottom: SPACING.xl }}>
-              We&apos;re here to help you navigate this important decision. Call us directly or fill out the form to request a tour.
-            </Typography>
-
-            <TouchableOpacity style={styles.contactItem} onPress={() => Linking.openURL('tel:248-854-4944')}>
-              <View style={styles.iconBox}>
-                <Phone size={24} color={COLORS.primary} />
-              </View>
-              <View>
-                <Typography variant="h4" style={{ marginBottom: 4 }}>Call Us</Typography>
-                <Typography variant="body" color={COLORS.textLight}>248-854-4944</Typography>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.contactItem} onPress={() => Linking.openURL('mailto:archerseniornavigation@gmail.com')}>
-              <View style={styles.iconBox}>
-                <Mail size={24} color={COLORS.primary} />
-              </View>
-              <View>
-                <Typography variant="h4" style={{ marginBottom: 4 }}>Email Us</Typography>
-                <Typography variant="body" color={COLORS.textLight}>archerseniornavigation@gmail.com</Typography>
-              </View>
-            </TouchableOpacity>
-
-            <View style={styles.divider} />
-
-            <Typography variant="h4" color={COLORS.primaryDark} style={{ marginBottom: SPACING.m }}>
-              Our Locations
-            </Typography>
-
-            <View style={styles.locationItem}>
-              <MapPin size={20} color={COLORS.secondary} style={{ marginTop: 4 }} />
-              <View>
-                <Typography variant="body" weight="bold">Maple Manor of Pinckney</Typography>
-                <Typography variant="caption" color={COLORS.textLight}>7119 Pinckney Rd, Pinckney, MI</Typography>
-              </View>
+      <Container style={{ paddingVertical: SPACING.xxl }}>
+        <View style={[styles.layout, isMobile && styles.layoutMobile]}>
+          <View style={[styles.formSection, isMobile && styles.formSectionMobile]}>
+            <View style={styles.progressBar}>
+              {[1, 2, 3, 4, 5].map((s) => (
+                <View
+                  key={s}
+                  style={[
+                    styles.progressStep,
+                    s <= step && styles.progressStepActive,
+                  ]}
+                />
+              ))}
             </View>
 
-            <View style={styles.locationItem}>
-              <MapPin size={20} color={COLORS.secondary} style={{ marginTop: 4 }} />
-              <View>
-                <Typography variant="body" weight="bold">Maple Manor of Hamburg</Typography>
-                <Typography variant="caption" color={COLORS.textLight}>9090 Chilson Rd, Brighton, MI</Typography>
+            <Typography variant="caption" color={COLORS.textLight} style={{ marginBottom: SPACING.s }}>
+              Step {step} of 5
+            </Typography>
+
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {step === 1 && (
+                <View>
+                  <Typography variant="h2" color={COLORS.primaryDark} style={{ marginBottom: SPACING.l }}>
+                    Tell Us About You
+                  </Typography>
+
+                  <View style={styles.inputGroup}>
+                    <Typography variant="body" weight="bold" style={{ marginBottom: SPACING.s }}>
+                      Your Name *
+                    </Typography>
+                    <TextInput
+                      style={styles.input}
+                      value={formData.name}
+                      onChangeText={(text) => updateField("name", text)}
+                      placeholder="Enter your full name"
+                      placeholderTextColor={COLORS.textLighter}
+                    />
+                  </View>
+
+                  <View style={styles.inputGroup}>
+                    <Typography variant="body" weight="bold" style={{ marginBottom: SPACING.s }}>
+                      Your Relationship to Resident *
+                    </Typography>
+                    <TextInput
+                      style={styles.input}
+                      value={formData.relationship}
+                      onChangeText={(text) => updateField("relationship", text)}
+                      placeholder="e.g., Daughter, Son, Spouse"
+                      placeholderTextColor={COLORS.textLighter}
+                    />
+                  </View>
+                </View>
+              )}
+
+              {step === 2 && (
+                <View>
+                  <Typography variant="h2" color={COLORS.primaryDark} style={{ marginBottom: SPACING.l }}>
+                    About Your Loved One
+                  </Typography>
+
+                  <View style={styles.inputGroup}>
+                    <Typography variant="body" weight="bold" style={{ marginBottom: SPACING.s }}>
+                      Resident Name *
+                    </Typography>
+                    <TextInput
+                      style={styles.input}
+                      value={formData.residentName}
+                      onChangeText={(text) => updateField("residentName", text)}
+                      placeholder="Enter resident's name"
+                      placeholderTextColor={COLORS.textLighter}
+                    />
+                  </View>
+
+                  <View style={styles.inputGroup}>
+                    <Typography variant="body" weight="bold" style={{ marginBottom: SPACING.s }}>
+                      Resident Age *
+                    </Typography>
+                    <TextInput
+                      style={styles.input}
+                      value={formData.residentAge}
+                      onChangeText={(text) => updateField("residentAge", text.replace(/[^0-9]/g, ""))}
+                      placeholder="Enter age"
+                      keyboardType="number-pad"
+                      placeholderTextColor={COLORS.textLighter}
+                    />
+                  </View>
+                </View>
+              )}
+
+              {step === 3 && (
+                <View>
+                  <Typography variant="h2" color={COLORS.primaryDark} style={{ marginBottom: SPACING.l }}>
+                    Primary Care Needs
+                  </Typography>
+                  <Typography variant="body" color={COLORS.textLight} style={{ marginBottom: SPACING.l }}>
+                    Select all that apply *
+                  </Typography>
+
+                  {CARE_NEEDS_OPTIONS.map((need) => (
+                    <TouchableOpacity
+                      key={need}
+                      style={[
+                        styles.checkboxOption,
+                        formData.careNeeds.includes(need) && styles.checkboxOptionSelected,
+                      ]}
+                      onPress={() => toggleCareNeed(need)}
+                    >
+                      <View
+                        style={[
+                          styles.checkbox,
+                          formData.careNeeds.includes(need) && styles.checkboxSelected,
+                        ]}
+                      >
+                        {formData.careNeeds.includes(need) && (
+                          <CheckCircle2 size={18} color={COLORS.white} />
+                        )}
+                      </View>
+                      <Typography variant="body">{need}</Typography>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+
+              {step === 4 && (
+                <View>
+                  <Typography variant="h2" color={COLORS.primaryDark} style={{ marginBottom: SPACING.l }}>
+                    Preferences
+                  </Typography>
+
+                  <View style={styles.inputGroup}>
+                    <Typography variant="body" weight="bold" style={{ marginBottom: SPACING.s }}>
+                      Preferred Location *
+                    </Typography>
+                    {LOCATION_OPTIONS.map((loc) => (
+                      <TouchableOpacity
+                        key={loc}
+                        style={[
+                          styles.radioOption,
+                          formData.preferredLocation === loc && styles.radioOptionSelected,
+                        ]}
+                        onPress={() => updateField("preferredLocation", loc)}
+                      >
+                        <View
+                          style={[
+                            styles.radio,
+                            formData.preferredLocation === loc && styles.radioSelected,
+                          ]}
+                        />
+                        <Typography variant="body">{loc}</Typography>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+
+                  <View style={styles.inputGroup}>
+                    <Typography variant="body" weight="bold" style={{ marginBottom: SPACING.s }}>
+                      Placement Timeline *
+                    </Typography>
+                    {TIMELINE_OPTIONS.map((time) => (
+                      <TouchableOpacity
+                        key={time}
+                        style={[
+                          styles.radioOption,
+                          formData.timeline === time && styles.radioOptionSelected,
+                        ]}
+                        onPress={() => updateField("timeline", time)}
+                      >
+                        <View
+                          style={[
+                            styles.radio,
+                            formData.timeline === time && styles.radioSelected,
+                          ]}
+                        />
+                        <Typography variant="body">{time}</Typography>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </View>
+              )}
+
+              {step === 5 && (
+                <View>
+                  <Typography variant="h2" color={COLORS.primaryDark} style={{ marginBottom: SPACING.l }}>
+                    Contact Information
+                  </Typography>
+
+                  <View style={styles.inputGroup}>
+                    <Typography variant="body" weight="bold" style={{ marginBottom: SPACING.s }}>
+                      Phone Number *
+                    </Typography>
+                    <TextInput
+                      style={styles.input}
+                      value={formData.phone}
+                      onChangeText={(text) => updateField("phone", text)}
+                      placeholder="(248) 555-1234"
+                      keyboardType="phone-pad"
+                      placeholderTextColor={COLORS.textLighter}
+                    />
+                  </View>
+
+                  <View style={styles.inputGroup}>
+                    <Typography variant="body" weight="bold" style={{ marginBottom: SPACING.s }}>
+                      Best Time to Call *
+                    </Typography>
+                    {BEST_TIME_OPTIONS.map((time) => (
+                      <TouchableOpacity
+                        key={time}
+                        style={[
+                          styles.radioOption,
+                          formData.bestTimeToCall === time && styles.radioOptionSelected,
+                        ]}
+                        onPress={() => updateField("bestTimeToCall", time)}
+                      >
+                        <View
+                          style={[
+                            styles.radio,
+                            formData.bestTimeToCall === time && styles.radioSelected,
+                          ]}
+                        />
+                        <Typography variant="body">{time}</Typography>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+
+                  <View style={styles.inputGroup}>
+                    <Typography variant="body" weight="bold" style={{ marginBottom: SPACING.s }}>
+                      Email Address (Optional)
+                    </Typography>
+                    <TextInput
+                      style={styles.input}
+                      value={formData.email}
+                      onChangeText={(text) => updateField("email", text)}
+                      placeholder="your@email.com"
+                      keyboardType="email-address"
+                      autoCapitalize="none"
+                      placeholderTextColor={COLORS.textLighter}
+                    />
+                  </View>
+
+                  <View style={styles.inputGroup}>
+                    <Typography variant="body" weight="bold" style={{ marginBottom: SPACING.s }}>
+                      Additional Notes (Optional)
+                    </Typography>
+                    <TextInput
+                      style={[styles.input, styles.textarea]}
+                      value={formData.additionalNotes}
+                      onChangeText={(text) => updateField("additionalNotes", text)}
+                      placeholder="Any additional information you'd like us to know..."
+                      multiline
+                      numberOfLines={4}
+                      placeholderTextColor={COLORS.textLighter}
+                    />
+                  </View>
+                </View>
+              )}
+
+              <View style={styles.buttonRow}>
+                {step > 1 && (
+                  <Button
+                    title="Back"
+                    onPress={() => setStep(step - 1)}
+                    variant="outline"
+                    style={{ flex: 1, marginRight: SPACING.m }}
+                  />
+                )}
+                {step < 5 ? (
+                  <Button
+                    title="Next"
+                    onPress={() => setStep(step + 1)}
+                    disabled={!canProceed()}
+                    style={{ flex: 1 }}
+                  />
+                ) : (
+                  <Button
+                    title={isSubmitting ? "Submitting..." : "Submit"}
+                    onPress={handleSubmit}
+                    disabled={!canProceed() || isSubmitting}
+                    style={{ flex: 1 }}
+                  />
+                )}
               </View>
-            </View>
+            </ScrollView>
           </View>
 
-          {/* Form Side */}
-          <View style={[styles.formCard, isMobile && styles.formCardMobile]}>
-            <Typography variant="h3" style={{ marginBottom: SPACING.l }}>
-              Send a Message
-            </Typography>
+          <View style={[styles.infoSection, isMobile && styles.infoSectionMobile]}>
+            <View style={styles.contactCard}>
+              <Typography variant="h3" color={COLORS.primaryDark} style={{ marginBottom: SPACING.l }}>
+                Contact Information
+              </Typography>
 
-            <View style={styles.formGroup}>
-              <Typography variant="caption" style={styles.label}>Full Name *</Typography>
-              <TextInput
-                style={styles.input}
-                placeholder="Jane Doe"
-                placeholderTextColor="#CCC"
-                value={name}
-                onChangeText={setName}
-              />
-            </View>
+              <View style={styles.contactItem}>
+                <Phone size={20} color={COLORS.primary} />
+                <View style={{ marginLeft: SPACING.m }}>
+                  <Typography variant="caption" color={COLORS.textLight}>
+                    Call Us
+                  </Typography>
+                  <Typography variant="body" weight="bold">
+                    (248) 854-4944
+                  </Typography>
+                </View>
+              </View>
 
-            <View style={styles.formGroup}>
-              <Typography variant="caption" style={styles.label}>Phone Number *</Typography>
-              <TextInput
-                style={styles.input}
-                placeholder="(555) 555-5555"
-                placeholderTextColor="#CCC"
-                keyboardType="phone-pad"
-                value={phone}
-                onChangeText={setPhone}
-              />
-            </View>
+              <View style={styles.contactItem}>
+                <Mail size={20} color={COLORS.primary} />
+                <View style={{ marginLeft: SPACING.m }}>
+                  <Typography variant="caption" color={COLORS.textLight}>
+                    Email
+                  </Typography>
+                  <Typography variant="body" weight="bold">
+                    info@archerseniorliving.com
+                  </Typography>
+                </View>
+              </View>
 
-            <View style={styles.formGroup}>
-              <Typography variant="caption" style={styles.label}>Email Address</Typography>
-              <TextInput
-                style={styles.input}
-                placeholder="jane@example.com"
-                placeholderTextColor="#CCC"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                value={email}
-                onChangeText={setEmail}
-              />
-            </View>
+              <View style={styles.contactItem}>
+                <MapPin size={20} color={COLORS.primary} />
+                <View style={{ marginLeft: SPACING.m }}>
+                  <Typography variant="caption" color={COLORS.textLight}>
+                    Maple Manor Pinckney
+                  </Typography>
+                  <Typography variant="body">
+                    7119 Pinckney Road{"\n"}Pinckney, MI 48169
+                  </Typography>
+                </View>
+              </View>
 
-            <View style={styles.formGroup}>
-              <Typography variant="caption" style={styles.label}>Relationship to Resident</Typography>
-              <TextInput
-                style={styles.input}
-                placeholder="Daughter, Son, Self, etc."
-                placeholderTextColor="#CCC"
-                value={relationship}
-                onChangeText={setRelationship}
-              />
-            </View>
-
-            <View style={styles.formGroup}>
-              <Typography variant="caption" style={styles.label}>Timeframe Needed</Typography>
-              <View style={styles.pickerContainer}>
-                <Picker
-                  selectedValue={timeframe}
-                  onValueChange={(itemValue) => setTimeframe(itemValue)}
-                  style={styles.picker}
-                >
-                  <Picker.Item label="Immediately" value="immediately" />
-                  <Picker.Item label="1-2 Weeks" value="1-2_weeks" />
-                  <Picker.Item label="30 Days" value="30_days" />
-                  <Picker.Item label="60+ Days" value="60_plus_days" />
-                  <Picker.Item label="Just researching" value="researching" />
-                </Picker>
+              <View style={styles.contactItem}>
+                <MapPin size={20} color={COLORS.primary} />
+                <View style={{ marginLeft: SPACING.m }}>
+                  <Typography variant="caption" color={COLORS.textLight}>
+                    Maple Manor Hamburg
+                  </Typography>
+                  <Typography variant="body">
+                    9090 Chilson Road{"\n"}Brighton, MI 48116
+                  </Typography>
+                </View>
               </View>
             </View>
-            
-            <View style={styles.formGroup}>
-              <Typography variant="caption" style={styles.label}>Preferred Home</Typography>
-              <View style={styles.pickerContainer}>
-                <Picker
-                  selectedValue={preferredHome}
-                  onValueChange={(itemValue) => setPreferredHome(itemValue)}
-                  style={styles.picker}
-                >
-                  <Picker.Item label="Either Location" value="either" />
-                  <Picker.Item label="Pinckney" value="pinckney" />
-                  <Picker.Item label="Hamburg" value="hamburg" />
-                </Picker>
-              </View>
-            </View>
-
-            <View style={styles.formGroup}>
-              <Typography variant="caption" style={styles.label}>How can we help?</Typography>
-              <TextInput
-                style={[styles.input, styles.textArea]}
-                placeholder="Please describe care needs or any specific questions..."
-                placeholderTextColor="#CCC"
-                multiline
-                numberOfLines={4}
-                value={needs}
-                onChangeText={setNeeds}
-              />
-            </View>
-
-            <Button
-              title="Send Inquiry"
-              onPress={handleSubmit}
-              isLoading={isSubmitting}
-              size="large"
-              style={{ marginTop: SPACING.m }}
-            />
           </View>
         </View>
       </Container>
@@ -258,121 +543,142 @@ const styles = StyleSheet.create({
     paddingVertical: SPACING.xxl,
     marginBottom: SPACING.xl,
   },
-  contentContainer: {
-    paddingBottom: SPACING.xxl,
-  },
-  grid: {
+  layout: {
     flexDirection: "row",
-    gap: SPACING.xl,
+    gap: SPACING.xxl,
   },
-  gridMobile: {
+  layoutMobile: {
     flexDirection: "column",
   },
-  infoCol: {
-    flex: 1,
-    paddingTop: SPACING.l,
-  },
-  infoColMobile: {
-    order: 2, // Flex order not fully supported in RN without special handling, better to just swap in JSX if needed, but here simple stack is fine
-  },
-  formCard: {
-    flex: 1.5,
+  formSection: {
+    flex: 2,
     backgroundColor: COLORS.white,
     padding: SPACING.xl,
     borderRadius: BORDER_RADIUS.l,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 12,
-    elevation: 3,
     borderWidth: 1,
     borderColor: COLORS.border,
   },
-  formCardMobile: {
+  formSectionMobile: {
     width: "100%",
-    padding: SPACING.l,
+  },
+  infoSection: {
+    flex: 1,
+  },
+  infoSectionMobile: {
+    width: "100%",
+    marginTop: SPACING.xl,
+  },
+  progressBar: {
+    flexDirection: "row",
+    marginBottom: SPACING.l,
+    gap: SPACING.s,
+  },
+  progressStep: {
+    flex: 1,
+    height: 4,
+    backgroundColor: COLORS.border,
+    borderRadius: 2,
+  },
+  progressStepActive: {
+    backgroundColor: COLORS.primary,
+  },
+  inputGroup: {
+    marginBottom: SPACING.l,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: BORDER_RADIUS.m,
+    padding: SPACING.m,
+    fontSize: 16,
+    color: COLORS.text,
+    backgroundColor: COLORS.white,
+  },
+  textarea: {
+    height: 120,
+    textAlignVertical: "top",
+  },
+  checkboxOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: SPACING.m,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: BORDER_RADIUS.m,
+    marginBottom: SPACING.s,
+  },
+  checkboxOptionSelected: {
+    borderColor: COLORS.primary,
+    backgroundColor: `${COLORS.primary}10`,
+  },
+  checkbox: {
+    width: 24,
+    height: 24,
+    borderWidth: 2,
+    borderColor: COLORS.border,
+    borderRadius: BORDER_RADIUS.s,
+    marginRight: SPACING.m,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  checkboxSelected: {
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
+  },
+  radioOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: SPACING.m,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: BORDER_RADIUS.m,
+    marginBottom: SPACING.s,
+  },
+  radioOptionSelected: {
+    borderColor: COLORS.primary,
+    backgroundColor: `${COLORS.primary}10`,
+  },
+  radio: {
+    width: 20,
+    height: 20,
+    borderWidth: 2,
+    borderColor: COLORS.border,
+    borderRadius: 10,
+    marginRight: SPACING.m,
+  },
+  radioSelected: {
+    borderColor: COLORS.primary,
+    borderWidth: 6,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    marginTop: SPACING.xl,
+  },
+  contactCard: {
+    backgroundColor: COLORS.white,
+    padding: SPACING.xl,
+    borderRadius: BORDER_RADIUS.l,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   contactItem: {
     flexDirection: "row",
-    alignItems: "center",
-    gap: SPACING.m,
+    alignItems: "flex-start",
     marginBottom: SPACING.l,
   },
-  iconBox: {
-    width: 48,
-    height: 48,
-    borderRadius: BORDER_RADIUS.full,
-    backgroundColor: COLORS.background,
-    alignItems: "center",
+  thankYouContainer: {
+    minHeight: 600,
     justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: SPACING.xxl * 2,
   },
-  divider: {
-    height: 1,
-    backgroundColor: COLORS.border,
-    marginVertical: SPACING.l,
-  },
-  locationItem: {
-    flexDirection: "row",
-    gap: SPACING.s,
-    marginBottom: SPACING.m,
-  },
-  formGroup: {
-    marginBottom: SPACING.m,
-  },
-  label: {
-    marginBottom: 6,
-    color: COLORS.textLight,
-    fontWeight: "600" as const,
-  },
-  input: {
-    backgroundColor: COLORS.background,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: BORDER_RADIUS.m,
-    paddingHorizontal: SPACING.m,
-    paddingVertical: 12,
-    fontSize: 16,
-    color: COLORS.text,
-    fontFamily: Platform.select({ web: "system-ui", default: undefined }),
-  },
-  textArea: {
-    minHeight: 100,
-    textAlignVertical: "top",
-  },
-  pickerContainer: {
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: BORDER_RADIUS.m,
-    backgroundColor: COLORS.background,
-    overflow: 'hidden',
-  },
-  picker: {
-    height: Platform.OS === 'ios' ? undefined : 50,
-    width: '100%',
-    backgroundColor: 'transparent',
-    borderWidth: 0, // Remove default border if any
-  },
-  successCard: {
+  thankYouContent: {
+    maxWidth: 700,
+    alignItems: "center",
     backgroundColor: COLORS.white,
-    padding: SPACING.xl,
+    padding: SPACING.xxl,
     borderRadius: BORDER_RADIUS.l,
-    alignItems: "center",
-    maxWidth: 600,
-    alignSelf: "center",
-    width: "100%",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 5,
-  },
-  successIcon: {
-    width: 80,
-    height: 80,
-    borderRadius: BORDER_RADIUS.full,
-    backgroundColor: COLORS.primary,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: SPACING.l,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
 });

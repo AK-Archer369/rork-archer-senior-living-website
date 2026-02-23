@@ -19,12 +19,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const NAV_ITEMS = [
   { label: "Home", path: "/" },
-  { label: "About", path: "/about" },
   { label: "Our Homes", path: "/homes" },
-  { label: "Services", path: "/services" },
-  { label: "Reviews", path: "/reviews" },
-  { label: "Gallery", path: "/gallery" },
-  { label: "Careers", path: "/careers" },
+  { label: "Pinckney", path: "/pinckney-assisted-living" },
+  { label: "Hamburg", path: "/hamburg-assisted-living" },
+  { label: "Blog", path: "/blog" },
   { label: "Contact", path: "/contact" },
 ];
 
