@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #F9F8F6;
+  color: #2D2D2D;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  .container-content {
+    @apply max-w-[1200px] mx-auto px-4 md:px-8;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-full transition-all duration-200 hover:bg-primary-dark active:scale-95 cursor-pointer;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-secondary text-primary-dark font-semibold rounded-full transition-all duration-200 hover:bg-secondary-light active:scale-95 cursor-pointer;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-primary text-primary font-semibold rounded-full transition-all duration-200 hover:bg-primary hover:text-white active:scale-95 cursor-pointer;
+  }
+
+  .btn-outline-white {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-white text-white font-semibold rounded-full transition-all duration-200 hover:bg-white hover:text-primary-dark active:scale-95 cursor-pointer;
+  }
+
+  .section-heading {
+    @apply font-serif text-3xl md:text-4xl font-bold text-primary-dark mb-4;
+  }
+
+  .section-subheading {
+    @apply text-lg text-text-light leading-relaxed mb-8;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl border border-border shadow-sm overflow-hidden;
+  }
+}
