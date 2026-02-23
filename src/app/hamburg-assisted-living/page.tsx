@@ -37,13 +37,69 @@ const FAQS = [
   },
 ];
 
-const GALLERY = [
-  'https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/3807736/pexels-photo-3807736.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/7551659/pexels-photo-7551659.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/6647049/pexels-photo-6647049.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/3951355/pexels-photo-3951355.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/7551684/pexels-photo-7551684.jpeg?auto=compress&cs=tinysrgb&w=800',
+const HERO_IMAGE = 'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/9vcz63ncttus7mfxjw26e';
+
+const GALLERY_SECTIONS = [
+  {
+    title: 'A Place That Feels Like Home',
+    images: [
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/3t00o21r4pj72nk1wkoze',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/a356vo78f8mzxqlna2522',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/y258r4pt201udwfpo5ous',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/3kt0sbe4jje3x21ym396o',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/yz0g9cbl5ec5bwekgzzex',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/ki92fy0zcpb9telchlucb',
+    ],
+  },
+  {
+    title: 'Private Comfortable Rooms',
+    images: [
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/ac2yflbr36t65jqigzpg7',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/oaapgxekw45uopkmoqfnm',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/n099sz3vrf1eogl4np4ov',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/2ok7b3v12nnqgm8r3wzqq',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/db6syjy42frxsxtup3keq',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/qpd3zvxoi6wpz978iyewr',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/mqp6uiif4cbdanpi1m596',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/uz0b8o1jh2e2s8i54hcrf',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/z6osfsebvzj19sa0qbxy7',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/ssgftm45uktcw249ef48q',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/ji074sza1qtruw0m0ckes',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/0yqp4nycr1j0szc9iv37c',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/iqxc6jo4wfivhqeu71nyd',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/ibxrlkirm6rallayvfewr',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/uhud1w3d05uupl3pypp33',
+    ],
+  },
+  {
+    title: 'Daily Life and Activities',
+    images: [
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/syso7oqzblvm7qzli0525',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/f10yoldysfy45tb2frx3m',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/9scc2cj1zvi6t0ild3r0y',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/5orbfi6gfco1rkw6r31ja',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/3dh7713p83pkahhftmma6',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/kpmivr5gfqw2ptgcgdxn8',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/56s9ijkdwezk0kpmlycce',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/h5dc4sw7lhhix067u2ssa',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/2o85av0l2k6icj0utgw19',
+    ],
+  },
+  {
+    title: 'Life at Maple Manor',
+    images: [
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/fodixtt0dsa7rqmc4pv46',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/6vdyyd1urvukjviz6dusb',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/e9ld8uzn6f5f3pc6mlxtz',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/azfnbxn5r6hb23ba1ulq0',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/p82bh91jwz4vporchwagv',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/grwxwtzd8axabspb862aq',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/m4mu6kqn1xr2c5gvkhu6y',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/89yqqdvmg493n7ayzhmph',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/ac2yflbr36t65jqigzpg7',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/oaapgxekw45uopkmoqfnm',
+    ],
+  },
 ];
 
 export default function HamburgPage() {
@@ -51,7 +107,7 @@ export default function HamburgPage() {
     <PageLayout>
       <div className="relative h-[500px] overflow-hidden">
         <img
-          src="https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=1600"
+          src={HERO_IMAGE}
           alt="Maple Manor of Hamburg"
           className="w-full h-full object-cover"
         />
@@ -102,15 +158,20 @@ export default function HamburgPage() {
                 </div>
               </div>
 
-              <div>
+              <div className="space-y-8">
                 <h2 className="section-heading">Photo Gallery</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {GALLERY.map((src, i) => (
-                    <div key={i} className="overflow-hidden rounded-xl aspect-[4/3]">
-                      <img src={src} alt={`Photo ${i + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                {GALLERY_SECTIONS.map((section) => (
+                  <div key={section.title}>
+                    <h3 className="font-semibold text-text-light text-base mb-3">{section.title}</h3>
+                    <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
+                      {section.images.map((src, i) => (
+                        <div key={i} className="flex-shrink-0 w-64 overflow-hidden rounded-xl aspect-[4/3]">
+                          <img src={src} alt={`${section.title} ${i + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
 
               <div>

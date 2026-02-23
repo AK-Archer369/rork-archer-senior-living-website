@@ -37,13 +37,62 @@ const FAQS = [
   },
 ];
 
-const GALLERY = [
-  'https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/7551442/pexels-photo-7551442.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/3951355/pexels-photo-3951355.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/6647049/pexels-photo-6647049.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/7551659/pexels-photo-7551659.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/3807736/pexels-photo-3807736.jpeg?auto=compress&cs=tinysrgb&w=800',
+const HERO_IMAGE = 'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/p4gc4sor0k751rybtvupf';
+
+const GALLERY_SECTIONS = [
+  {
+    title: 'A Place That Feels Like Home',
+    images: [
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/4cpaxx10075c4awsgrepu',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/0vk315y9p43wt3jtezq1l',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/531b8ru5eut8yznqmexes',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/3nripr57yd17lm4fz8s87',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/fbag2objjy8l4zx1ksng8',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/t9a5n36xbkloopy8ycbbb',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/wlr8fuyd23l000vbvu5ji',
+    ],
+  },
+  {
+    title: 'Private Comfortable Rooms',
+    images: [
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/kdaj6cx845rixvmorjp89',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/ym1stxyi5gdeg3anadkhz',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/eab5n338fi6ikqhoiuwfe',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/kjjxrx3c9mwxnwaiaylbv',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/otx1aod1fzv78yfzavvn5',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/lbomenv6wyg3q3yknszs6',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/2j6o3nms27y2wyy74osdt',
+    ],
+  },
+  {
+    title: 'Daily Life and Activities',
+    images: [
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/syso7oqzblvm7qzli0525',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/f10yoldysfy45tb2frx3m',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/9scc2cj1zvi6t0ild3r0y',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/5orbfi6gfco1rkw6r31ja',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/3dh7713p83pkahhftmma6',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/kpmivr5gfqw2ptgcgdxn8',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/56s9ijkdwezk0kpmlycce',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/h5dc4sw7lhhix067u2ssa',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/2o85av0l2k6icj0utgw19',
+    ],
+  },
+  {
+    title: 'Life at Maple Manor',
+    images: [
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/4cpaxx10075c4awsgrepu',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/0vk315y9p43wt3jtezq1l',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/531b8ru5eut8yznqmexes',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/kdaj6cx845rixvmorjp89',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/ym1stxyi5gdeg3anadkhz',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/syso7oqzblvm7qzli0525',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/f10yoldysfy45tb2frx3m',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/3nripr57yd17lm4fz8s87',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/fbag2objjy8l4zx1ksng8',
+      'https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/2j6o3nms27y2wyy74osdt',
+    ],
+  },
 ];
 
 export default function PinckneyPage() {
@@ -51,7 +100,7 @@ export default function PinckneyPage() {
     <PageLayout>
       <div className="relative h-[500px] overflow-hidden">
         <img
-          src="https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=1600"
+          src={HERO_IMAGE}
           alt="Maple Manor of Pinckney"
           className="w-full h-full object-cover"
         />
@@ -102,15 +151,20 @@ export default function PinckneyPage() {
                 </div>
               </div>
 
-              <div>
+              <div className="space-y-8">
                 <h2 className="section-heading">Photo Gallery</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {GALLERY.map((src, i) => (
-                    <div key={i} className="overflow-hidden rounded-xl aspect-[4/3]">
-                      <img src={src} alt={`Photo ${i + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                {GALLERY_SECTIONS.map((section) => (
+                  <div key={section.title}>
+                    <h3 className="font-semibold text-text-light text-base mb-3">{section.title}</h3>
+                    <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
+                      {section.images.map((src, i) => (
+                        <div key={i} className="flex-shrink-0 w-64 overflow-hidden rounded-xl aspect-[4/3]">
+                          <img src={src} alt={`${section.title} ${i + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
 
               <div>
